@@ -33,11 +33,17 @@ h2 {
 }
 
 .chip {
-  border: 1px solid gray;
+  background-color: gray;
+  color: rgba(255, 255, 255, 0.75);
   height: 20px;
+  line-height: 1.4;
   margin: 2.5px;
   text-align: center;
   width: 20px;
+}
+
+.chip.on {
+  background-color: green;
 }
 
 .chip:first-of-type {
