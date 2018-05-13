@@ -34,32 +34,32 @@ const multiBitsAnd = (aBus, bBus) => aBus.map((a, i) => and(a, bBus[i]))
 
 const multiBitsOr = (aBus, bBus) => aBus.map((a, i) => or(a, bBus[i]))
 
-const multiBitsMux = (aBus, bBus, sel) => aBus.map((a, i) => mux(a, bBus[i]))
+const multiBitsMux = (aBus, bBus, sel) => aBus.map((a, i) => mux(a, bBus[i], sel))
 
-const orMultiWay = bus => bus.reduce((result, bit) => or(result, bit))
+const orMultiWays = bus => bus.reduce((result, bit) => or(result, bit))
 
-const multiBitsMux4Way = (bus1, bus2, bus3, bus4, sel1, sel2) => multiBitsMux(
+const multiBitsMux4Ways = (bus1, bus2, bus3, bus4, sel1, sel2) => multiBitsMux(
   multiBitsMux(bus1, bus2, sel2),
   multiBitsMux(bus3, bus4, sel2),
   sel1,
 )
 
-const multiBitsMux8Way = (
+const multiBitsMux8Ways = (
   bus1, bus2, bus3, bus4, bus5, bus6, bus7, bus8,
   sel1, sel2, sel3,
 ) => multiBitsMux(
-  multiBitsMux4Way(bus1, bus2, bus3, bus4, sel2, sel3),
-  multiBitsMux4Way(bus5, bus6, bus7, bus8, sel2, sel3),
+  multiBitsMux4Ways(bus1, bus2, bus3, bus4, sel2, sel3),
+  multiBitsMux4Ways(bus5, bus6, bus7, bus8, sel2, sel3),
   sel1,
 )
 
-const dmux4way = (input, sel1, sel2) => dmux(input, sel1).reduce((r, i) => {
+const dmux4Ways = (input, sel1, sel2) => dmux(input, sel1).reduce((r, i) => {
   r = r.concat(dmux(i, sel2))
   return r
 }, [])
 
-const dmux8way = (input, sel1, sel2, sel3) => dmux(input, sel1).reduce((r, i) => {
-  r = r.concat(dmux4Way(i, sel2, sel3))
+const dmux8Ways = (input, sel1, sel2, sel3) => dmux(input, sel1).reduce((r, i) => {
+  r = r.concat(dmux4Ways(i, sel2, sel3))
   return r
 }, [])
 
@@ -75,7 +75,9 @@ if (typeof module !== 'undefined') module.exports = {
   multiBitsAnd,
   multiBitsOr,
   multiBitsMux,
-  orMultiWay,
-  multiBitsMux4Way,
-  multiBitsMux8Way,
+  orMultiWays,
+  multiBitsMux4Ways,
+  multiBitsMux8Ways,
+  dmux4Ways,
+  dmux8Ways,
 }

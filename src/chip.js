@@ -5,5 +5,5 @@ const chip = on => {
   let content = on ? '1' : '0'
   div.appendChild(document.createTextNode(content))
 
-  document.querySelector('.app').appendChild(div)
+  return div
 }

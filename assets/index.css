@@ -10,7 +10,25 @@ body {
   padding: 15px;
 }
 
-.app {
+h1 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+h2 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.section {
+  margin-bottom: 15px;
+}
+
+.section:last-of-type {
+  margin-bottom: 0;
+}
+
+.section-body {
   display: flex;
 }
 
@@ -20,4 +38,12 @@ body {
   margin: 2.5px;
   text-align: center;
   width: 20px;
+}
+
+.chip:first-of-type {
+  margin-left: 0;
+}
+
+.chip:last-of-type {
+  margin-right: 0;
 }
