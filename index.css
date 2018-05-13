@@ -8,26 +8,3 @@
 body {
   padding: 15px;
 }
-
-.root {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.event {
-  background-color: white;
-  border: 1px solid gray;
-  border-radius: 3px;
-  overflow: hidden;
-  width: 200px;   
-}
-
-.event .title,
-.event .time {
-  padding: 5px 10px;
-}
-
-.event .title {
-  background-color: blue;
-  color: white;
-}
