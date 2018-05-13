@@ -38,4 +38,9 @@ if (dmux(1, 1).a !== 0 || dmux(1, 1).b !== 1) console.log('Failed')
 if (dmux(0, 0).a !== 0 || dmux(0, 0).b !== 0) console.log('Failed')
 if (dmux(0, 1).a !== 0 || dmux(0, 1).b !== 0) console.log('Failed')
 
-console.log('Test completed.')
+if (dmux(1, 0).a !== 1 || dmux(1, 0).b !== 0) console.log('Failed')
+if (dmux(1, 1).a !== 0 || dmux(1, 1).b !== 1) console.log('Failed')
+if (dmux(0, 0).a !== 0 || dmux(0, 0).b !== 0) console.log('Failed')
+if (dmux(0, 1).a !== 0 || dmux(0, 1).b !== 0) console.log('Failed')
+
+console.log('All tests completed.')
