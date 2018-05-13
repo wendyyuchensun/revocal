@@ -1,0 +1,55 @@
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  outline: 0;
+  padding: 0;
+}
+
+body {
+  padding: 15px;
+}
+
+h1 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+h2 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.section {
+  margin-bottom: 15px;
+}
+
+.section:last-of-type {
+  margin-bottom: 0;
+}
+
+.section-body {
+  display: flex;
+}
+
+.chip {
+  background-color: gray;
+  color: rgba(255, 255, 255, 0.75);
+  height: 20px;
+  line-height: 1.4;
+  margin: 2.5px;
+  text-align: center;
+  width: 20px;
+}
+
+.chip.on {
+  background-color: green;
+}
+
+.chip:first-of-type {
+  margin-left: 0;
+}
+
+.chip:last-of-type {
+  margin-right: 0;
+}
