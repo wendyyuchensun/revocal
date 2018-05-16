@@ -4,7 +4,22 @@ const auditBit = bit => {
   }
 }
 
-const auditBits = bits => bits.forEach(auditBit)
+const auditBits = bus => bus.forEach(auditBit)
+
+const enforceEqualLength = (...buses) => {
+  const length = buses[0].length
+  const isLengthEqual = buses.every(bus => bus.length === length)
+  if (!isLengthEqual) {
+    throw new Error('Buses are not of equal length.')
+  }
+}
+
+const enforceSelNumMeet = (sels, buses) => {
+  const selNum = Math.pow(2, sels.length)
+  if (buses.length !== selNum) {
+    throw new Error('Number of selections should be equal to number of buses.')
+  }
+}
 
 const prefilledArray = (len, filling) => {
   if (typeof filling === 'number') auditBit(filling)
@@ -14,15 +29,18 @@ const prefilledArray = (len, filling) => {
   return (new Array(len)).fill(filling)
 }
 
-const binary2Decimal = bits => {
-  auditBits(bits)
-  return bits.reverse().reduce((result, bit, i) => {
+const binary2Decimal = bus => {
+  auditBits(bus)
+
+  return bus.reverse().reduce((result, bit, i) => {
     const increament = (bit === 0) ? 0 : Math.pow(2, i)
     return result + increament
   }, 0)
 }
 
 const nand = (busA, busB) => {
+  enforceEqualLength(busA, busB)
+
   return busA.map((bitA, i) => {
     const bitB = busB[i]
     auditBit(bitA)
@@ -33,11 +51,16 @@ const nand = (busA, busB) => {
 
 const not = bus => nand(bus, prefilledArray(bus.length, 1))
 
-const and = (busA, busB) => not(nand(busA, busB))
+const and = (busA, busB) => {
+  enforceEqualLength(busA, busB)
+
+  return not(nand(busA, busB))
+}
 
 const or = (...buses) => {
-  const result = prefilledArray(buses[0].length, 0)
+  enforceEqualLength(...buses)
 
+  const result = prefilledArray(buses[0].length, 0)
   return buses.reduce((busA, busB) => {
     const busC = nand(busA, busB)
     return nand(nand(busA, busC), nand(busB, busC))
@@ -45,21 +68,25 @@ const or = (...buses) => {
 }
 
 const xor = (busA, busB) => {
+  enforceEqualLength(busA, busB)
+
   const busC = nand(busA, busB)
   return nand(nand(busA, busC), nand(busB, busC))
 }
 
-// I'm cheating here by not using gates previously built.
 const mux = (sels, ...buses) => {
   auditBits(sels)      
+  enforceEqualLength(buses)
+  enforceSelNumMeet(sels, buses)
+
   const selectedIndx = binary2Decimal(sels)
   return buses[selectedIndx]
 }
 
-// Cheating here as well. See comment above.
 const dmux = (sels, bus) => {
-  const defaultResult = prefilledArray(bus.length, 0)
+  auditBits(sels)      
 
+  const defaultResult = prefilledArray(bus.length, 0)
   const resultNum = Math.pow(2, sels.length)
   const results = prefilledArray(resultNum, defaultResult)
 
@@ -72,6 +99,8 @@ const dmux = (sels, bus) => {
 if (typeof module !== 'undefined') module.exports = {
   auditBit,
   auditBits,
+  enforceEqualLength,
+  enforceSelNumMeet,
   prefilledArray,
   binary2Decimal,
   nand,
