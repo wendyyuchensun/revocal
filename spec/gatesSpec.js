@@ -4,6 +4,8 @@ const gates = require('../src/gates')
 const {
   auditBit,
   auditBits,
+  enforceEqualLength,
+  enforceSelNumMeet,
   prefilledArray,
   binary2Decimal,
   nand,
@@ -31,6 +33,14 @@ const rangeError = {
   message: 'Bus should have length.',
 }
 
+const lengthError = {
+  message: 'Buses are not of equal length.',
+}
+
+const selectionError = {
+  message: 'Number of selections should be equal to number of buses.',
+}
+
 // auditBit
 assert.doesNotThrow(() => auditBit(0))
 assert.doesNotThrow(() => auditBit(1))
@@ -39,6 +49,14 @@ assert.throws(() => auditBit(-1), auditError)
 // auditBits
 assert.doesNotThrow(() => auditBits(sampleBus1))
 assert.throws(() => auditBit([0, 1, 2]), auditError)
+
+// enforceEqualLength
+assert.doesNotThrow(() => enforceEqualLength(sampleBus1, sampleBus2))
+assert.throws(() => enforceEqualLength(sampleBus1, [0, 1, 2]), lengthError)
+
+// enforceSelNumMeet
+assert.doesNotThrow(() => enforceSelNumMeet([0, 1], [1, 0, 1, 1]))
+assert.throws(() => enforceSelNumMeet([0, 1], [0, 1]), selectionError)
 
 // prefilledArray
 // single bit
