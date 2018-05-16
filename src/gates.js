@@ -1,69 +1,79 @@
-const sanityCheck = input => {
-  if (input !== 0 && input !== 1) throw new Error('Input should be 0 or 1.');
+const auditBit = bit => {
+  if (bit !== 0 && bit !== 1) {
+    throw new TypeError('Only 0 or 1 allowed.')
+  }
 }
 
-const nand = (a, b) => {
-  sanityCheck(a)
-  sanityCheck(b)
+const auditBits = bits => bits.forEach(auditBit)
 
-  if (!a || !b) return 1;
-  return 0;
+const prefilledArray = (len, filling) => {
+  if (typeof filling === 'number') auditBit(filling)
+  else auditBits(filling) 
+
+  if (len <= 0) throw new RangeError('Bus should have length.')
+  return (new Array(len)).fill(filling)
 }
 
-const not = input => nand(input, 1)
-
-const and = (a, b) => not(nand(a, b))
-
-const or = (a, b) => nand(nand(a, a), nand(b, b))
-
-const xor = (a, b) => {
-  const c = nand(a, b)
-  return nand(nand(a, c), nand(b, c))
+const binary2Decimal = bits => {
+  auditBits(bits)
+  return bits.reverse().reduce((result, bit, i) => {
+    const increament = (bit === 0) ? 0 : Math.pow(2, i)
+    return result + increament
+  }, 0)
 }
 
-const mux = (a, b, sel) => and(a, not(sel)) || and(b, sel)
+const nand = (busA, busB) => {
+  return busA.map((bitA, i) => {
+    const bitB = busB[i]
+    auditBit(bitA)
+    auditBit(bitB)
+    return bitA === 1 && bitB === 1 ? 0 : 1
+  })
+}
 
-const dmux = (input, sel) => [
-  and(input, not(sel)),
-  and(input, sel),
-]
+const not = bus => nand(bus, prefilledArray(bus.length, 1))
 
-const multiBitsNot = bus => bus.map(not)
+const and = (busA, busB) => not(nand(busA, busB))
 
-const multiBitsAnd = (aBus, bBus) => aBus.map((a, i) => and(a, bBus[i]))
+const or = (...buses) => {
+  const result = prefilledArray(buses[0].length, 0)
 
-const multiBitsOr = (aBus, bBus) => aBus.map((a, i) => or(a, bBus[i]))
+  return buses.reduce((busA, busB) => {
+    const busC = nand(busA, busB)
+    return nand(nand(busA, busC), nand(busB, busC))
+  }, result)
+}
 
-const multiBitsMux = (aBus, bBus, sel) => aBus.map((a, i) => mux(a, bBus[i], sel))
+const xor = (busA, busB) => {
+  const busC = nand(busA, busB)
+  return nand(nand(busA, busC), nand(busB, busC))
+}
 
-const orMultiWays = bus => bus.reduce((result, bit) => or(result, bit))
+// I'm cheating here by not using gates previously built.
+const mux = (sels, ...buses) => {
+  auditBits(sels)      
+  const selectedIndx = binary2Decimal(sels)
+  return buses[selectedIndx]
+}
 
-const multiBitsMux4Ways = (bus1, bus2, bus3, bus4, sel1, sel2) => multiBitsMux(
-  multiBitsMux(bus1, bus2, sel2),
-  multiBitsMux(bus3, bus4, sel2),
-  sel1,
-)
+// Cheating here as well. See comment above.
+const dmux = (sels, bus) => {
+  const defaultResult = prefilledArray(bus.length, 0)
 
-const multiBitsMux8Ways = (
-  bus1, bus2, bus3, bus4, bus5, bus6, bus7, bus8,
-  sel1, sel2, sel3,
-) => multiBitsMux(
-  multiBitsMux4Ways(bus1, bus2, bus3, bus4, sel2, sel3),
-  multiBitsMux4Ways(bus5, bus6, bus7, bus8, sel2, sel3),
-  sel1,
-)
+  const resultNum = Math.pow(2, sels.length)
+  const results = prefilledArray(resultNum, defaultResult)
 
-const dmux4Ways = (input, sel1, sel2) => dmux(input, sel1).reduce((r, i) => {
-  r = r.concat(dmux(i, sel2))
-  return r
-}, [])
+  const selectedIndx = binary2Decimal(sels)
+  results[selectedIndx] = bus.slice()
 
-const dmux8Ways = (input, sel1, sel2, sel3) => dmux(input, sel1).reduce((r, i) => {
-  r = r.concat(dmux4Ways(i, sel2, sel3))
-  return r
-}, [])
+  return results
+}
 
 if (typeof module !== 'undefined') module.exports = {
+  auditBit,
+  auditBits,
+  prefilledArray,
+  binary2Decimal,
   nand,
   not,
   and,
@@ -71,13 +81,4 @@ if (typeof module !== 'undefined') module.exports = {
   xor,
   mux,
   dmux,
-  multiBitsNot,
-  multiBitsAnd,
-  multiBitsOr,
-  multiBitsMux,
-  orMultiWays,
-  multiBitsMux4Ways,
-  multiBitsMux8Ways,
-  dmux4Ways,
-  dmux8Ways,
 }
