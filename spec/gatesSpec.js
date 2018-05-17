@@ -83,6 +83,7 @@ assert.deepEqual(not(sampleBus1), [1, 1])
 assert.deepEqual(not(sampleBus2), [0, 0])
 
 // and
+assert.deepEqual(and([0], [0]), [0])
 assert.deepEqual(and(sampleBus1, sampleBus2), [0, 0])
 
 // or
