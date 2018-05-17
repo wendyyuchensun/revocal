@@ -2,7 +2,5 @@ language: node_js
 node_js:
   - "10"
 
-before_script:
-  - chmod -R 755 ./scripts
 script:
-  - ./scripts/test
+  - node $(find spec -name *.js)
