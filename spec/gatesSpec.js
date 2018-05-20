@@ -87,6 +87,7 @@ assert.deepEqual(and([0], [0]), [0])
 assert.deepEqual(and(sampleBus1, sampleBus2), [0, 0])
 
 // or
+assert.deepEqual(or([1], [1]), [1])
 assert.deepEqual(or(sampleBus1, sampleBus2), [1, 1])
 
 // xor

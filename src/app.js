@@ -81,7 +81,7 @@ class Chip extends Template {
         },
         {
           name: 'span',
-          text: gates[this.state.gate]([this.state.inputA], [this.state.inputB]),
+          text: gates[this.state.gate]([this.state.inputA], [this.state.inputB])[0],
           attrs: null,
           value: null,
           events: null,

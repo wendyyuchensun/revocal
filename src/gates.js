@@ -62,8 +62,7 @@ const or = (...buses) => {
 
   const result = prefilledArray(buses[0].length, 0)
   return buses.reduce((busA, busB) => {
-    const busC = nand(busA, busB)
-    return nand(nand(busA, busC), nand(busB, busC))
+    return nand(nand(busA, busA), nand(busB, busB))
   }, result)
 }
 
