@@ -1,10 +1,11 @@
 class Template {
-  constructor(state, root) {
+  constructor(props, state, root) {
+    this.props = props
     this.state = state
     this.root = root
 
     this.virtualInstance = this.createVirtualInstance()
-    this.DOMInstance = this.createDOMInstance()
+    this.DOMInstance = createDOMInstance(this.virtualInstance)
 
     if (this.root && this.DOMInstance) this.root.appendChild(this.DOMInstance)
   }
@@ -13,36 +14,38 @@ class Template {
     return null
   }
 
-  createDOMInstance() {
-    if (!this.virtualInstance) return null
+  setState(partialState) {
+    this.state = Object.assign({}, this.state, partialState)
 
-    const { name, text, events } = this.virtualInstance
-    const node = document.createElement(name)
+    // TODO: reconcile
+    this.virtualInstance = this.createVirtualInstance()
+    this.root.removeChild(this.DOMInstance)
+    this.DOMInstance = createDOMInstance(this.virtualInstance)
+    this.root.appendChild(this.DOMInstance)
+  }
+}
+
+const createDOMInstance = virtualInstance => {
+  if (!virtualInstance) return null
+
+  const { name, text, events, childInstances } = virtualInstance
+  const node = document.createElement(name)
+
+  if (text !== null) {
     const textNode = document.createTextNode(text)
     node.appendChild(textNode)
+  } else if (childInstances !== null) {
+    childInstances.forEach(childInstance => {
+      node.appendChild(createDOMInstance(childInstance))
+    })
+  }
 
+  if (events !== null) {
     events.forEach(event => {
       const { name, handler } = event
       node.addEventListener(name, handler)
     })
-
-    return node
   }
 
-  setState(partialState) {
-    this.state = Object.assign({}, this.state, partialState)
-
-    const newVirtualInstance = this.createVirtualInstance()
-    if (
-      // TODO: compare events
-      this.virtualInstance.name !== newVirtualInstance.name ||
-      this.virtualInstance.text !== newVirtualInstance.text
-    ) {
-      this.virtualInstance = newVirtualInstance
-
-      this.root.removeChild(this.DOMInstance)
-      this.DOMInstance = this.createDOMInstance()
-      this.root.appendChild(this.DOMInstance)
-    }
-  }
+  return node
 }
