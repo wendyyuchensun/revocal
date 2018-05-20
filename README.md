@@ -1,4 +1,5 @@
 # Revocal
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 https://trello.com/b/8cw2Sapl
 
