@@ -95,18 +95,20 @@ const dmux = (sels, bus) => {
   return results
 }
 
-if (typeof module !== 'undefined') module.exports = {
-  auditInput,
-  auditInputs,
-  enforceEqualLength,
-  enforceSelNumMeet,
-  prefilledArray,
-  binary2Decimal,
-  nand,
-  not,
-  and,
-  or,
-  xor,
-  mux,
-  dmux,
+if (typeof module !== 'undefined') {
+  module.exports = {
+    auditInput,
+    auditInputs,
+    enforceEqualLength,
+    enforceSelNumMeet,
+    prefilledArray,
+    binary2Decimal,
+    nand,
+    not,
+    and,
+    or,
+    xor,
+    mux,
+    dmux
+  }
 }
