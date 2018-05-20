@@ -2,8 +2,8 @@ const assert = require('assert').strict
 const gates = require('../src/gates')
 
 const {
-  auditBit,
-  auditBits,
+  auditInput,
+  auditInputs,
   enforceEqualLength,
   enforceSelNumMeet,
   prefilledArray,
@@ -41,14 +41,14 @@ const selectionError = {
   message: 'Number of selections should be equal to number of buses.',
 }
 
-// auditBit
-assert.doesNotThrow(() => auditBit(0))
-assert.doesNotThrow(() => auditBit(1))
-assert.throws(() => auditBit(-1), auditError)
+// auditInput
+assert.doesNotThrow(() => auditInput(0))
+assert.doesNotThrow(() => auditInput(1))
+assert.throws(() => auditInput(-1), auditError)
 
-// auditBits
-assert.doesNotThrow(() => auditBits(sampleBus1))
-assert.throws(() => auditBit([0, 1, 2]), auditError)
+// auditInputs
+assert.doesNotThrow(() => auditInputs(sampleBus1))
+assert.throws(() => auditInput([0, 1, 2]), auditError)
 
 // enforceEqualLength
 assert.doesNotThrow(() => enforceEqualLength(sampleBus1, sampleBus2))
@@ -59,11 +59,11 @@ assert.doesNotThrow(() => enforceSelNumMeet([0, 1], [1, 0, 1, 1]))
 assert.throws(() => enforceSelNumMeet([0, 1], [0, 1]), selectionError)
 
 // prefilledArray
-// single bit
+// single input
 assert.deepEqual(prefilledArray(2, 1), [1, 1])
 assert.throws(() => prefilledArray(2, 2), auditError)
 assert.throws(() => prefilledArray(-1, 0), rangeError)
-// multiple bits
+// multiple inputs
 assert.deepEqual(prefilledArray(2, sampleBus1), [sampleBus1, sampleBus1])
 assert.throws(() => prefilledArray(2, [1, -1]), auditError)
 assert.throws(() => prefilledArray(-1, 0), rangeError)
