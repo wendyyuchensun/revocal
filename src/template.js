@@ -1,5 +1,5 @@
 class Template {
-  constructor(props, state, root) {
+  constructor (props, state, root) {
     this.props = props
     this.state = state
     this.root = root
@@ -9,7 +9,7 @@ class Template {
     this.root.appendChild(this.DOMInstance)
   }
 
-  setState(partialState) {
+  setState (partialState) {
     this.state = Object.assign({}, this.state, partialState)
     const newVirtualInstance = this.createVirtualInstance()
     reconcile(this.virtualInstance, newVirtualInstance, root, this.DOMInstance)
@@ -78,14 +78,14 @@ const reconcile = (prevInstance, nextInstance, root, DOMInstance) => {
         prevInstance.attrs.forEach(attr => {
           const { name } = attr
           DOMInstance.removeAttribute(name)
-        }) 
+        })
       }
 
       if (nextInstance.attrs) {
         nextInstance.attrs.forEach(attr => {
           const { name, value } = attr
           DOMInstance.setAttribute(name, value)
-        }) 
+        })
       }
     }
 
@@ -94,7 +94,7 @@ const reconcile = (prevInstance, nextInstance, root, DOMInstance) => {
         prevInstance.events.forEach(event => {
           const { name, handler } = event
           DOMInstance.removeEventListener(name, handler)
-        }) 
+        })
       }
 
       if (nextInstance.events) {
