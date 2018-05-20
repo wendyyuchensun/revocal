@@ -16,10 +16,15 @@ class Template {
   createDOMInstance() {
     if (!this.virtualInstance) return null
 
-    const { name, text } = this.virtualInstance
+    const { name, text, events } = this.virtualInstance
     const node = document.createElement(name)
     const textNode = document.createTextNode(text)
     node.appendChild(textNode)
+
+    events.forEach(event => {
+      const { name, handler } = event
+      node.addEventListener(name, handler)
+    })
 
     return node
   }
@@ -29,6 +34,7 @@ class Template {
 
     const newVirtualInstance = this.createVirtualInstance()
     if (
+      // TODO: compare events
       this.virtualInstance.name !== newVirtualInstance.name ||
       this.virtualInstance.text !== newVirtualInstance.text
     ) {
