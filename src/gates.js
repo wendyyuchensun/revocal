@@ -1,10 +1,10 @@
-const auditBit = bit => {
-  if (bit !== 0 && bit !== 1) {
+const auditInput = input => {
+  if (input !== 0 && input !== 1) {
     throw new TypeError('Only 0 or 1 allowed.')
   }
 }
 
-const auditBits = bus => bus.forEach(auditBit)
+const auditInputs = bus => bus.forEach(auditInput)
 
 const enforceEqualLength = (...buses) => {
   const length = buses[0].length
@@ -22,18 +22,18 @@ const enforceSelNumMeet = (sels, buses) => {
 }
 
 const prefilledArray = (len, filling) => {
-  if (typeof filling === 'number') auditBit(filling)
-  else auditBits(filling) 
+  if (typeof filling === 'number') auditInput(filling)
+  else auditInputs(filling)
 
   if (len <= 0) throw new RangeError('Bus should have length.')
   return (new Array(len)).fill(filling)
 }
 
 const binary2Decimal = bus => {
-  auditBits(bus)
+  auditInputs(bus)
 
-  return bus.reverse().reduce((result, bit, i) => {
-    const increament = (bit === 0) ? 0 : Math.pow(2, i)
+  return bus.reverse().reduce((result, input, i) => {
+    const increament = (input === 0) ? 0 : Math.pow(2, i)
     return result + increament
   }, 0)
 }
@@ -41,11 +41,11 @@ const binary2Decimal = bus => {
 const nand = (busA, busB) => {
   enforceEqualLength(busA, busB)
 
-  return busA.map((bitA, i) => {
-    const bitB = busB[i]
-    auditBit(bitA)
-    auditBit(bitB)
-    return bitA === 1 && bitB === 1 ? 0 : 1
+  return busA.map((inputA, i) => {
+    const inputB = busB[i]
+    auditInput(inputA)
+    auditInput(inputB)
+    return inputA === 1 && inputB === 1 ? 0 : 1
   })
 }
 
@@ -62,8 +62,7 @@ const or = (...buses) => {
 
   const result = prefilledArray(buses[0].length, 0)
   return buses.reduce((busA, busB) => {
-    const busC = nand(busA, busB)
-    return nand(nand(busA, busC), nand(busB, busC))
+    return nand(nand(busA, busA), nand(busB, busB))
   }, result)
 }
 
@@ -75,7 +74,7 @@ const xor = (busA, busB) => {
 }
 
 const mux = (sels, ...buses) => {
-  auditBits(sels)      
+  auditInputs(sels)
   enforceEqualLength(buses)
   enforceSelNumMeet(sels, buses)
 
@@ -84,7 +83,7 @@ const mux = (sels, ...buses) => {
 }
 
 const dmux = (sels, bus) => {
-  auditBits(sels)      
+  auditInputs(sels)
 
   const defaultResult = prefilledArray(bus.length, 0)
   const resultNum = Math.pow(2, sels.length)
@@ -97,8 +96,8 @@ const dmux = (sels, bus) => {
 }
 
 if (typeof module !== 'undefined') module.exports = {
-  auditBit,
-  auditBits,
+  auditInput,
+  auditInputs,
   enforceEqualLength,
   enforceSelNumMeet,
   prefilledArray,
