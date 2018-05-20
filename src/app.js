@@ -42,6 +42,12 @@ class Chip extends Template {
             },
           ],
           childInstances: null,
+        },
+        {
+          name: 'span',
+          text: nand([this.state.inputA], [this.state.inputB]),
+          events: null,
+          childInstances: null,
         }
       ],
     }

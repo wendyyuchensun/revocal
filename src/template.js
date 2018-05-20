@@ -6,22 +6,52 @@ class Template {
 
     this.virtualInstance = this.createVirtualInstance()
     this.DOMInstance = createDOMInstance(this.virtualInstance)
-
-    if (this.root && this.DOMInstance) this.root.appendChild(this.DOMInstance)
-  }
-
-  createVirtualInstance() {
-    return null
+    this.root.appendChild(this.DOMInstance)
   }
 
   setState(partialState) {
     this.state = Object.assign({}, this.state, partialState)
+    const newVirtualInstance = this.createVirtualInstance()
+    reconcile(this.virtualInstance, newVirtualInstance, root, this.DOMInstance)
+    this.virtualInstance = newVirtualInstance
+  }
+}
 
-    // TODO: reconcile
-    this.virtualInstance = this.createVirtualInstance()
-    this.root.removeChild(this.DOMInstance)
-    this.DOMInstance = createDOMInstance(this.virtualInstance)
-    this.root.appendChild(this.DOMInstance)
+const reconcile = (prevInstance, nextInstance, root, DOMInstance) => {
+  if (prevInstance.name !== nextInstance.name) {
+    const newDOMInstance = createDOMInstance(nextInstance)
+    root.replaceChild(newDOMInstance, DOMInstance)
+    DOMInstance = newDOMInstance
+  } else {
+    if (prevInstance.text !== nextInstance.text) {
+      DOMInstance.childNodes[0].nodeValue = nextInstance.text
+    }
+
+    if (prevInstance.events !== nextInstance.events) {
+      if (prevInstance.events) {
+        prevInstance.events.forEach(event => {
+          const { name, handler } = event
+          DOMInstance.removeEventListener(name, handler)
+        }) 
+      }
+
+      if (nextInstance.events) {
+        nextInstance.events.forEach(event => {
+          const { name, handler } = event
+          DOMInstance.addEventListener(name, handler)
+        })
+      }
+    }
+
+    const prevChildInstancesLength = prevInstance.childInstances && prevInstance.childInstances.length || 0
+    const nextChildInstancesLength = nextInstance.childInstances && nextInstance.childInstances.length || 0
+    const childrenCount = Math.max(prevChildInstancesLength, nextChildInstancesLength)
+    for (let i = 0; i < childrenCount; i++) {
+      const prevChildInstance = prevInstance.childInstances[i] || null
+      const nextChildInstance = nextInstance.childInstances[i] || null
+      const childDOMInstance = DOMInstance.childNodes[i] || null
+      reconcile(prevChildInstance, nextChildInstance, DOMInstance, childDOMInstance)
+    }
   }
 }
 
