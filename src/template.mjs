@@ -1,4 +1,4 @@
-class Template { // eslint-disable-line
+export default class Template { // eslint-disable-line
   constructor (props, state, root) {
     this.props = props
     this.state = state

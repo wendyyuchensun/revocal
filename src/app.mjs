@@ -1,4 +1,11 @@
-/* globals nand, and, or, xor, Template */
+import {
+  nand,
+  and,
+  or,
+  xor
+} from './gates.mjs'
+
+import Template from './template.mjs'
 
 const gates = {
   'nand': nand,

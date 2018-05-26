@@ -1,12 +1,12 @@
-const auditInput = input => {
+export const auditInput = input => {
   if (input !== 0 && input !== 1) {
     throw new TypeError('Only 0 or 1 allowed.')
   }
 }
 
-const auditInputs = bus => bus.forEach(auditInput)
+export const auditInputs = bus => bus.forEach(auditInput)
 
-const enforceEqualLength = (...buses) => {
+export const enforceEqualLength = (...buses) => {
   const length = buses[0].length
   const isLengthEqual = buses.every(bus => bus.length === length)
   if (!isLengthEqual) {
@@ -14,14 +14,14 @@ const enforceEqualLength = (...buses) => {
   }
 }
 
-const enforceSelNumMeet = (sels, buses) => {
+export const enforceSelNumMeet = (sels, buses) => {
   const selNum = Math.pow(2, sels.length)
   if (buses.length !== selNum) {
     throw new Error('Number of selections should be equal to number of buses.')
   }
 }
 
-const prefilledArray = (len, filling) => {
+export const prefilledArray = (len, filling) => {
   if (typeof filling === 'number') auditInput(filling)
   else auditInputs(filling)
 
@@ -29,7 +29,7 @@ const prefilledArray = (len, filling) => {
   return (new Array(len)).fill(filling)
 }
 
-const binary2Decimal = bus => {
+export const binary2Decimal = bus => {
   auditInputs(bus)
 
   return bus.reverse().reduce((result, input, i) => {
@@ -38,7 +38,7 @@ const binary2Decimal = bus => {
   }, 0)
 }
 
-const nand = (busA, busB) => {
+export const nand = (busA, busB) => {
   enforceEqualLength(busA, busB)
 
   return busA.map((inputA, i) => {
@@ -49,15 +49,15 @@ const nand = (busA, busB) => {
   })
 }
 
-const not = bus => nand(bus, prefilledArray(bus.length, 1))
+export const not = bus => nand(bus, prefilledArray(bus.length, 1))
 
-const and = (busA, busB) => {
+export const and = (busA, busB) => {
   enforceEqualLength(busA, busB)
 
   return not(nand(busA, busB))
 }
 
-const or = (...buses) => {
+export const or = (...buses) => {
   enforceEqualLength(...buses)
 
   const result = prefilledArray(buses[0].length, 0)
@@ -66,14 +66,14 @@ const or = (...buses) => {
   }, result)
 }
 
-const xor = (busA, busB) => {
+export const xor = (busA, busB) => {
   enforceEqualLength(busA, busB)
 
   const busC = nand(busA, busB)
   return nand(nand(busA, busC), nand(busB, busC))
 }
 
-const mux = (sels, ...buses) => {
+export const mux = (sels, ...buses) => {
   auditInputs(sels)
   enforceEqualLength(buses)
   enforceSelNumMeet(sels, buses)
@@ -82,7 +82,7 @@ const mux = (sels, ...buses) => {
   return buses[selectedIndx]
 }
 
-const dmux = (sels, bus) => {
+export const dmux = (sels, bus) => {
   auditInputs(sels)
 
   const defaultResult = prefilledArray(bus.length, 0)
@@ -93,22 +93,4 @@ const dmux = (sels, bus) => {
   results[selectedIndx] = bus.slice()
 
   return results
-}
-
-if (typeof module !== 'undefined') {
-  module.exports = {
-    auditInput,
-    auditInputs,
-    enforceEqualLength,
-    enforceSelNumMeet,
-    prefilledArray,
-    binary2Decimal,
-    nand,
-    not,
-    and,
-    or,
-    xor,
-    mux,
-    dmux
-  }
 }

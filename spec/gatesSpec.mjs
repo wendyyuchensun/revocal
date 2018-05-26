@@ -1,7 +1,5 @@
-const assert = require('assert').strict
-const gates = require('../src/gates')
-
-const {
+import assert from 'assert'
+import {
   auditInput,
   auditInputs,
   enforceEqualLength,
@@ -15,7 +13,7 @@ const {
   xor,
   mux,
   dmux
-} = gates
+} from '../src/gates.mjs'
 
 // fixtures
 const sampleBus1 = [0, 0]
