@@ -1,7 +1,5 @@
-const assert = require('assert').strict
-const gates = require('../src/gates')
-
-const {
+import assert from 'assert'
+import {
   auditInput,
   auditInputs,
   enforceEqualLength,
@@ -14,8 +12,8 @@ const {
   or,
   xor,
   mux,
-  dmux,
-} = gates
+  dmux
+} from '../src/gates.mjs'
 
 // fixtures
 const sampleBus1 = [0, 0]
@@ -25,20 +23,20 @@ const sampleBus4 = [1, 0]
 
 const auditError = {
   name: 'TypeError',
-  message: 'Only 0 or 1 allowed.',
+  message: 'Only 0 or 1 allowed.'
 }
 
 const rangeError = {
   name: 'RangeError',
-  message: 'Bus should have length.',
+  message: 'Bus should have length.'
 }
 
 const lengthError = {
-  message: 'Buses are not of equal length.',
+  message: 'Buses are not of equal length.'
 }
 
 const selectionError = {
-  message: 'Number of selections should be equal to number of buses.',
+  message: 'Number of selections should be equal to number of buses.'
 }
 
 // auditInput

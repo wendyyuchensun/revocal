@@ -1,22 +1,21 @@
-class Input extends Template {
-  createVirtualInstance() {
-    return {
-      name: 'span',
-      text: this.props.input,
-      events: [],
-    }
-  }
-}
+import {
+  nand,
+  and,
+  or,
+  xor
+} from './gates.mjs'
+
+import Template from './template.mjs'
 
 const gates = {
   'nand': nand,
   'and': and,
   'or': or,
-  'xor': xor,
+  'xor': xor
 }
 
 class Chip extends Template {
-  createVirtualInstance() {
+  createVirtualInstance () {
     return {
       name: 'div',
       text: null,
@@ -34,8 +33,8 @@ class Chip extends Template {
               name: 'change',
               handler: e => {
                 this.setState({ gate: e.target.value })
-              },
-            },
+              }
+            }
           ],
           childInstances: Object.keys(gates).map(gateName => {
             return {
@@ -43,9 +42,9 @@ class Chip extends Template {
               text: gateName,
               attrs: null,
               events: null,
-              chidInstances: null,
+              chidInstances: null
             }
-          }),
+          })
         },
         {
           name: 'span',
@@ -58,10 +57,10 @@ class Chip extends Template {
               handler: () => {
                 if (this.state.inputA === 0) this.setState({ inputA: 1 })
                 else if (this.state.inputA === 1) this.setState({ inputA: 0 })
-              },
-            },
+              }
+            }
           ],
-          childInstances: null,
+          childInstances: null
         },
         {
           name: 'span',
@@ -74,10 +73,10 @@ class Chip extends Template {
               handler: () => {
                 if (this.state.inputB === 0) this.setState({ inputB: 1 })
                 else if (this.state.inputB === 1) this.setState({ inputB: 0 })
-              },
-            },
+              }
+            }
           ],
-          childInstances: null,
+          childInstances: null
         },
         {
           name: 'span',
@@ -85,12 +84,13 @@ class Chip extends Template {
           attrs: null,
           value: null,
           events: null,
-          childInstances: null,
+          childInstances: null
         }
-      ],
+      ]
     }
   }
 }
 
 const root = document.querySelector('.root')
+// eslint-disable-next-line
 const chip = new Chip(null, { gate: Object.keys(gates)[0], inputA: 1, inputB: 1 }, root)

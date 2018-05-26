@@ -1,5 +1,5 @@
-class Template {
-  constructor(props, state, root) {
+export default class Template { // eslint-disable-line
+  constructor (props, state, root) {
     this.props = props
     this.state = state
     this.root = root
@@ -9,10 +9,10 @@ class Template {
     this.root.appendChild(this.DOMInstance)
   }
 
-  setState(partialState) {
+  setState (partialState) {
     this.state = Object.assign({}, this.state, partialState)
     const newVirtualInstance = this.createVirtualInstance()
-    reconcile(this.virtualInstance, newVirtualInstance, root, this.DOMInstance)
+    reconcile(this.virtualInstance, newVirtualInstance, this.root, this.DOMInstance)
     this.virtualInstance = newVirtualInstance
   }
 }
@@ -63,8 +63,8 @@ const reconcile = (prevInstance, nextInstance, root, DOMInstance) => {
 
     if (prevInstance.value !== nextInstance.value) DOMInstance.value = nextInstance.value
 
-    const prevChildInstancesLength = prevInstance.childInstances && prevInstance.childInstances.length || 0
-    const nextChildInstancesLength = nextInstance.childInstances && nextInstance.childInstances.length || 0
+    const prevChildInstancesLength = (prevInstance.childInstances && prevInstance.childInstances.length) || 0
+    const nextChildInstancesLength = (nextInstance.childInstances && nextInstance.childInstances.length) || 0
     const childrenCount = Math.max(prevChildInstancesLength, nextChildInstancesLength)
     for (let i = 0; i < childrenCount; i++) {
       const prevChildInstance = prevInstance.childInstances[i] || null
@@ -78,14 +78,14 @@ const reconcile = (prevInstance, nextInstance, root, DOMInstance) => {
         prevInstance.attrs.forEach(attr => {
           const { name } = attr
           DOMInstance.removeAttribute(name)
-        }) 
+        })
       }
 
       if (nextInstance.attrs) {
         nextInstance.attrs.forEach(attr => {
           const { name, value } = attr
           DOMInstance.setAttribute(name, value)
-        }) 
+        })
       }
     }
 
@@ -94,7 +94,7 @@ const reconcile = (prevInstance, nextInstance, root, DOMInstance) => {
         prevInstance.events.forEach(event => {
           const { name, handler } = event
           DOMInstance.removeEventListener(name, handler)
-        }) 
+        })
       }
 
       if (nextInstance.events) {
