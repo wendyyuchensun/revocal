@@ -1,4 +1,5 @@
-import assert from 'assert'
+import assert from './strictAssert.mjs'
+
 import {
   auditInput,
   auditInputs,
