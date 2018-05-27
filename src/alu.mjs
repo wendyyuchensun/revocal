@@ -36,3 +36,9 @@ export const add = (busA, busB) => {
 
   return reversedResult.reverse()
 }
+
+export const inc = bus => {
+  const anotherBus = Array(bus.length).fill(0)
+  anotherBus[bus.length - 1] = 1
+  return add(bus, anotherBus)
+}

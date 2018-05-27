@@ -2,7 +2,8 @@ import assert from 'assert'
 import {
   halfAdder,
   fullAdder,
-  add
+  add,
+  inc
 } from '../src/alu.mjs'
 
 // halfAdder
@@ -23,3 +24,7 @@ assert.deepEqual(fullAdder([1], [1], [1]), { sum: [1], carry: [1] })
 // add
 assert.deepEqual(add([1, 1], [1, 1]), [1, 0])
 assert.deepEqual(add([1, 1, 0], [1, 1, 1]), [1, 0, 1])
+
+// inc
+assert.deepEqual(inc([1, 1]), [0, 0])
+assert.deepEqual(inc([1, 1, 0]), [1, 1, 1])
