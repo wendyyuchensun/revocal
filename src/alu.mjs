@@ -1,5 +1,5 @@
 import {
-  auditInput,
+  auditInputBus,
   prefilledArray,
   not,
   and,
@@ -38,31 +38,29 @@ export const add = (busA, busB) => {
 export const inc1 = bus => add(bus, one(bus.length))
 
 // alu
-export const isZero = bus => bus.slice(0, bus.length - 1).every(input => input === 0)
+export const isZero = bus => {
+  if (bus.length === 1) return bus[0] === 0
+  return bus.slice(0, bus.length - 1).every(input => input === 0)
+}
 
 export const negate = bus => {
-  if (isZero(bus)) return bus.slice(0)
+  if (isZero(bus) || bus.length === 1) return bus.slice()
 
   const lastIndx = bus.length - 1
   return bus.map((input, i) => (i === lastIndx) ? not([input])[0] : input)
 }
 
-const auditControlBits = (...controlBits) => controlBits.forEach(auditInput)
+const auditControlBits = (...controlBits) => controlBits.forEach(auditInputBus)
 
 const produceInput = (bus, z, n) => {
-  let result = z
-    ? prefilledArray(bus.length, 0)
-    : bus.slice()
-
-  return n ? not(result) : result
+  let result = isZero(z) ? bus.slice() : prefilledArray(bus.length, 0)
+  return isZero(n) ? result : not(result)
 }
 
-const alu = (busA, busB, za, na, zb, nb, f, no) => {
+export const alu = (busA, busB, za, na, zb, nb, f, no) => {
   auditControlBits(za, na, zb, nb, f, no)
   const a = produceInput(busA, za, na)
   const b = produceInput(busB, zb, nb)
-  const result = f ? add(a, b) : and(a, b)
-  return no ? not(result) : result
+  const result = isZero(f) ? and(a, b) : add(a, b)
+  return isZero(no) ? result : not(result)
 }
-
-export default alu

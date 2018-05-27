@@ -2,7 +2,7 @@ import assert from './strictAssert.mjs'
 
 import {
   auditInput,
-  auditInputs,
+  auditInputBus,
   enforceEqualLength,
   enforceSelNumMeet,
   prefilledArray,
@@ -45,8 +45,8 @@ assert.doesNotThrow(() => auditInput(0))
 assert.doesNotThrow(() => auditInput(1))
 assert.throws(() => auditInput(-1), auditError)
 
-// auditInputs
-assert.doesNotThrow(() => auditInputs(sampleBus1))
+// auditInputBus
+assert.doesNotThrow(() => auditInputBus(sampleBus1))
 assert.throws(() => auditInput([0, 1, 2]), auditError)
 
 // enforceEqualLength
