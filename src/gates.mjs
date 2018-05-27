@@ -79,7 +79,7 @@ export const mux = (sels, ...buses) => {
   enforceSelNumMeet(sels, buses)
 
   const selectedIndx = binary2Decimal(sels)
-  return buses[selectedIndx]
+  return buses[selectedIndx].slice()
 }
 
 export const dmux = (sels, bus) => {

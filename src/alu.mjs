@@ -52,7 +52,7 @@ const auditControlBits = (...controlBits) => controlBits.forEach(auditInput)
 const produceInput = (bus, z, n) => {
   let result = z
     ? prefilledArray(bus.length, 0)
-    : bus.slice(0)
+    : bus.slice()
 
   return n ? not(result) : result
 }
