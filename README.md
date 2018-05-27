@@ -1,4 +1,5 @@
 # Revocal
+[![Build Status](https://travis-ci.com/wendyyuchensun/revocal.svg?branch=master)](https://travis-ci.com/wendyyuchensun/revocal)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 https://trello.com/b/8cw2Sapl
