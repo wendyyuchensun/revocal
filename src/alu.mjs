@@ -1,44 +1,36 @@
 import {
   and,
-  xor
-} from './gates'
+  or,
+  xor,
+  prefilledArray
+} from './gates.mjs'
 
-class AddResult {
-  constructor () {
-    this.result = { sum: [0], carry: [0] }
-  }
-
-  add (bit) {
-    const { sum, carry } = this.result
-    this.result = {
-      sum: xor(sum, bit),
-      carry: xor(carry, and(sum, bit))
-    }
-
-    return this
-  }
-}
-
-export const halfAdder = (bitA, bitB) => (new AddResult()).add(bitA).add(bitB).result
-
-export const fullAdder = (bitA, bitB, carry) => (new AddResult()).add(bitA).add(bitB).add(carry).result
+const bitify = arr => arr.map(elm => [elm])
+const reverseBitify = arr => arr.map(elm => elm[0])
 
 export const add = (busA, busB) => {
-  const reversedBusA = busA.reverse()
-  const reversedBusB = busB.reverse()
+  const bitifiedBusA = bitify(busA)
+  const bitifiedBusB = bitify(busB)
 
   let carry = [0]
-  const reversedResult = reversedBusA.map((bitA, i) => {
-    const result = fullAdder([bitA], [reversedBusB[i]], carry)
-    carry = result.carry
-    return result.sum[0]
+  const bitifiedSum = bitifiedBusA.map((inputA, i) => {
+    const inputB = bitifiedBusB[i]
+    const sum = xor(xor(inputA, inputB), carry)
+
+    carry = or(
+      and(inputA, inputB),
+      and(inputB, carry),
+      and(carry, inputA)
+    )
+
+    return sum
   })
 
-  return reversedResult.reverse()
+  return reverseBitify(bitifiedSum)
 }
 
-export const inc = bus => {
-  const anotherBus = Array(bus.length).fill(0)
-  anotherBus[bus.length - 1] = 1
-  return add(bus, anotherBus)
+export const inc1 = bus => {
+  const one = prefilledArray(bus.length, 0)
+  one[0] = 1
+  return add(bus, one)
 }
