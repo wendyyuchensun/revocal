@@ -1,36 +1,36 @@
 import {
-  and,
-  or,
+  prefilledArray,
   xor,
-  prefilledArray
+  and,
+  or
 } from './gates.mjs'
 
-const bitify = arr => arr.map(elm => [elm])
-const reverseBitify = arr => arr.map(elm => elm[0])
+// helpers
+export const one = len => {
+  const one = prefilledArray(len, 0)
+  one[0] = 1
+  return one
+}
 
+// adders
 export const add = (busA, busB) => {
-  const bitifiedBusA = bitify(busA)
-  const bitifiedBusB = bitify(busB)
-
   let carry = [0]
-  const bitifiedSum = bitifiedBusA.map((inputA, i) => {
-    const inputB = bitifiedBusB[i]
-    const sum = xor(xor(inputA, inputB), carry)
 
+  return busA.map((a, i) => {
+    const inputA = [a]
+    const inputB = [busB[i]]
+
+    const sum = xor(xor(inputA, inputB), carry)
     carry = or(
       and(inputA, inputB),
       and(inputB, carry),
       and(carry, inputA)
     )
 
-    return sum
+    return sum[0]
   })
-
-  return reverseBitify(bitifiedSum)
 }
 
-export const inc1 = bus => {
-  const one = prefilledArray(bus.length, 0)
-  one[0] = 1
-  return add(bus, one)
-}
+export const inc1 = bus => add(bus, one(bus.length))
+
+// alu
