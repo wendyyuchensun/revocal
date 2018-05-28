@@ -1,5 +1,5 @@
 import {
-  auditBut,
+  auditBus,
   prefilledArray,
   not,
   and,
@@ -48,7 +48,7 @@ export const negate = bus => {
   return bus.map((input, i) => (i === 0) ? not([input])[0] : input)
 }
 
-const auditControlBits = (...controlBits) => controlBits.forEach(auditBut)
+const auditControlBits = (...controlBits) => controlBits.forEach(auditBus)
 
 const produceInput = (bus, z, n) => {
   let result = isZero(z) ? bus.slice() : prefilledArray(bus.length, 0)

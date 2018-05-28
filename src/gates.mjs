@@ -4,7 +4,7 @@ export const auditInput = input => {
   }
 }
 
-export const auditBut = bus => bus.forEach(auditInput)
+export const auditBus = bus => bus.forEach(auditInput)
 
 export const enforceEqualLength = (...buses) => {
   const length = buses[0].length
@@ -23,14 +23,14 @@ export const enforceSelNumMeet = (sels, buses) => {
 
 export const prefilledArray = (len, filling) => {
   if (typeof filling === 'number') auditInput(filling)
-  else auditBut(filling)
+  else auditBus(filling)
 
   if (len <= 0) throw new RangeError('Bus should have length.')
   return (new Array(len)).fill(filling)
 }
 
 export const binary2Decimal = bus => {
-  auditBut(bus)
+  auditBus(bus)
 
   return bus.reverse().reduce((result, input, i) => {
     const increament = (input === 0) ? 0 : Math.pow(2, i)
@@ -74,7 +74,7 @@ export const xor = (busA, busB) => {
 }
 
 export const mux = (sels, ...buses) => {
-  auditBut(sels)
+  auditBus(sels)
   enforceEqualLength(buses)
   enforceSelNumMeet(sels, buses)
 
@@ -83,7 +83,7 @@ export const mux = (sels, ...buses) => {
 }
 
 export const dmux = (sels, bus) => {
-  auditBut(sels)
+  auditBus(sels)
 
   const defaultResult = prefilledArray(bus.length, 0)
   const resultNum = Math.pow(2, sels.length)
