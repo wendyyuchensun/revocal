@@ -40,14 +40,12 @@ export const inc1 = bus => add(bus, one(bus.length))
 // alu
 export const isZero = bus => {
   if (bus.length === 1) return bus[0] === 0
-  return bus.slice(0, bus.length - 1).every(input => input === 0)
+  return bus.slice(1, bus.length).every(input => input === 0)
 }
 
 export const negate = bus => {
   if (isZero(bus) || bus.length === 1) return bus.slice()
-
-  const lastIndx = bus.length - 1
-  return bus.map((input, i) => (i === lastIndx) ? not([input])[0] : input)
+  return bus.map((input, i) => (i === 0) ? not([input])[0] : input)
 }
 
 const auditControlBits = (...controlBits) => controlBits.forEach(auditInputBus)

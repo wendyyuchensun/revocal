@@ -46,9 +46,9 @@ assert.deepEqual(inc1([1, 1]), [0, 0])
 
 // negate
 assert.deepEqual(negate([0, 0]), [0, 0])
-assert.deepEqual(negate([0, 1]), [0, 1])
-assert.deepEqual(negate([1, 0]), [1, 1])
-assert.deepEqual(negate([1, 1]), [1, 0])
+assert.deepEqual(negate([0, 1]), [1, 1])
+assert.deepEqual(negate([1, 0]), [1, 0])
+assert.deepEqual(negate([1, 1]), [0, 1])
 
 // alu
 const x = [0]
