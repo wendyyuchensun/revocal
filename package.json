@@ -4,8 +4,9 @@
   "description": "https://trello.com/b/8cw2Sapl",
   "main": "src/app.js",
   "scripts": {
-    "test": "node_modules/.bin/standard && node --experimental-modules $(find spec -name *.mjs)",
-    "dev": "node dev-server.js"
+    "lint": "node_modules/.bin/standard",
+    "dev": "node dev-server.js",
+    "test": "node --experimental-modules $(find spec -name *.mjs)"
   },
   "repository": {
     "type": "git",
