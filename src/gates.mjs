@@ -4,6 +4,8 @@ import {
   enforceEqualLength,
   enforceSelNumMeet,
   prefilledArray,
+  busOf0,
+  busOf1,
   binary2Decimal
 } from './helpers.mjs'
 
@@ -17,7 +19,7 @@ export const nand = (busA, busB) => {
   })
 }
 
-export const not = bus => nand(bus, prefilledArray(bus.length, 1))
+export const not = bus => nand(bus, busOf1(bus.length))
 
 export const and = (busA, busB) => {
   enforceEqualLength(busA, busB)
@@ -26,7 +28,7 @@ export const and = (busA, busB) => {
 
 export const or = (...buses) => {
   enforceEqualLength(...buses)
-  const result = prefilledArray(buses[0].length, 0)
+  const result = busOf0(buses[0].length)
   return buses.reduce((busA, busB) => {
     return nand(nand(busA, busA), nand(busB, busB))
   }, result)
@@ -50,7 +52,7 @@ export const mux = (sels, ...buses) => {
 export const dmux = (sels, bus) => {
   auditBus(sels)
 
-  const defaultResult = prefilledArray(bus.length, 0)
+  const defaultResult = busOf0(bus.length)
   const resultNum = Math.pow(2, sels.length)
   const results = prefilledArray(resultNum, defaultResult)
 
